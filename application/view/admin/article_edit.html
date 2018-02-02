@@ -12,19 +12,27 @@
     <body>
         <div id="layout">
             <form action="" method="post" class="form form-horizontal" id="form-article-add" style="">
-                <div class="row cl" style="margin-bottom: 15px;">
-                    <label class="form-label col-xs-4 col-xs-offset-1 col-sm-2">标题:</label>
+                <div class="col-lg-8 col-lg-offset-3 cl" style="margin-bottom: 15px;margin-top: 15px;">
                     <div class="formControls col-xs-8 col-sm-9">
                         {present name="article"}
+                            
                             <input type="text" name="title" value="{$article.article_title}" class="input-text" style=" width:35%">
                             <input type="hidden" name="id" value="{$article.id}">
-                            <input type="hidden" name="action" value="1">
                             分类
-                            <input type="text" name="category" value="{$category}" class="input-text" style=" width:35%">
+                            <select class="form-control" name="category" style=" width:35%; display: inline-block;">  
+                                {volist name='category' id="vo"}
+                                <option value="{$vo.id}">{$vo.name}</option>  
+                                {/volist}
+                            </select>
                         {else /}
+                            标题:
                             <input type="text" name="title" placeholder="请输入标题~" value="" class="input-text" style=" width:35%">
                             分类
-                            <input type="text" name="category" id="" placeholder="输入分类~" value="" class="input-text" style=" width:35%">
+                            <select class="form-control" name="category" style=" width:35%; display: inline-block;">  
+                                {volist name='category' id="vo"}
+                                <option value="{$vo.id}">{$vo.name}</option>  
+                                {/volist}
+                            </select>
                         {/present}
                     </div>
                 </div>
@@ -65,10 +73,11 @@
                     path         : '/static/extend/editor/lib/',
                     imageUpload : true,
                     imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                    imageUploadURL : "/static/upload/images/",
+                    imageUploadURL : "/admin/imgUpload",
                 });
                         
             });
+
             function article_submit(obj)
             {
                 var data = $('#form-article-add').serialize();

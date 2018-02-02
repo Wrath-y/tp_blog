@@ -1,9 +1,9 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:79:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article.html";i:1517156122;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:79:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article.html";i:1517497788;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh">
     <head>
         <meta charset="utf-8" />
-        <title>HTML Preview(markdown to html) - Editor.md examples</title>
+        <title></title>
         <link rel="stylesheet" href="/static/extend/editor/css/style.css" />
         <link rel="stylesheet" href="/static/extend/editor/css/editormd.preview.css" />
         <style>            

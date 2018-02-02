@@ -2,6 +2,7 @@
 namespace app\controller;
 use think\Request;
 use think\Controller;
+use think\Db;
 use app\model\Article;
 
 class AdminController extends Controller
@@ -29,12 +30,12 @@ class AdminController extends Controller
     {
         if (!empty($id)) {
             //渲染文章单页
-            $article = Article::get($id);
+            $article = Article::article_res('',$id)[0];
             $this->assign('article', $article);
             return view('admin/article');
         } else {
             //渲染所有文章
-            $list = Article::list();
+            $list = Article::article_res();
             $this->assign('list', $list);
             return view('admin/article_list');
         }
@@ -56,7 +57,7 @@ class AdminController extends Controller
         }
         if ($action === 'edit') {
             $id = Request::instance()->param('id');
-            $name = db('article_category')->where('id', $id)->field('name')->find();
+            $name = Db::table('article_category')->where('id', $id)->field('name')->find();
             return view('admin/article_category_edit',[
                 'name' => $name
             ]);
@@ -91,10 +92,11 @@ class AdminController extends Controller
             $category = Article::get_category($id);
             $this->assign([
                 'article' => $article,
-                'category' => $category['name']
+                'category' => $category
             ]);
         } else {
-            $id = '';
+            $category = Article::get_category();
+            $this->assign('category', $category);
         }
         if (Request::instance()->isAjax()) {
             $data['article_title'] = Request::instance()->param('title');
@@ -120,7 +122,7 @@ class AdminController extends Controller
                     }
             } else {
                 $res = Article::article_edit($data);
-                return json($res);
+                
                 if ($res != 0) {
                     return json([
                         'code' => 2000,
@@ -134,6 +136,7 @@ class AdminController extends Controller
                 }
             }
         }
+        
     	return view();
     }
     public function del()
@@ -157,5 +160,36 @@ class AdminController extends Controller
                 'msg' => '删除失败'
             ]);
         }
+    }
+    /**
+    * @param int $guid  文件序列号
+    */
+    public function imgUpload()
+    {
+        $guid = Request::instance()->param('guid');
+        $file = Request::instance()->file('editormd-image-file');
+        if($file){
+            $info = $file->move(ROOT_PATH . 'public' . DS . 'static'. DS . 'upload' . DS . 'images');
+            if($info){
+                // 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
+                $url = '/static/upload/images/'.$info->getSaveName();
+                return json([
+                    'code' => 1,
+                    'msg' => '上传成功',
+                    'url' => $url
+                ]);
+            }else{
+                // 上传失败获取错误信息
+                $url = $file->getError();
+            }
+        }
+        
+    }
+    /**
+    * 图片管理
+    */
+    public function picture()
+    {
+        
     }
 }

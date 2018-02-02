@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:84:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_edit.html";i:1517157624;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:84:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_edit.html";i:1517496108;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh">
     <head>
@@ -13,19 +13,27 @@
     <body>
         <div id="layout">
             <form action="" method="post" class="form form-horizontal" id="form-article-add" style="">
-                <div class="row cl" style="margin-bottom: 15px;">
-                    <label class="form-label col-xs-4 col-xs-offset-1 col-sm-2">标题:</label>
+                <div class="col-lg-8 col-lg-offset-3 cl" style="margin-bottom: 15px;margin-top: 15px;">
                     <div class="formControls col-xs-8 col-sm-9">
                         <?php if(isset($article)): ?>
+                            
                             <input type="text" name="title" value="<?php echo $article['article_title']; ?>" class="input-text" style=" width:35%">
                             <input type="hidden" name="id" value="<?php echo $article['id']; ?>">
-                            <input type="hidden" name="action" value="1">
                             分类
-                            <input type="text" name="category" value="<?php echo $category; ?>" class="input-text" style=" width:35%">
+                            <select class="form-control" name="category" style=" width:35%; display: inline-block;">  
+                                <?php if(is_array($category) || $category instanceof \think\Collection || $category instanceof \think\Paginator): $i = 0; $__LIST__ = $category;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+                                <option value="<?php echo $vo['id']; ?>"><?php echo $vo['name']; ?></option>  
+                                <?php endforeach; endif; else: echo "" ;endif; ?>
+                            </select>
                         <?php else: ?>
+                            标题:
                             <input type="text" name="title" placeholder="请输入标题~" value="" class="input-text" style=" width:35%">
                             分类
-                            <input type="text" name="category" id="" placeholder="输入分类~" value="" class="input-text" style=" width:35%">
+                            <select class="form-control" name="category" style=" width:35%; display: inline-block;">  
+                                <?php if(is_array($category) || $category instanceof \think\Collection || $category instanceof \think\Paginator): $i = 0; $__LIST__ = $category;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
+                                <option value="<?php echo $vo['id']; ?>"><?php echo $vo['name']; ?></option>  
+                                <?php endforeach; endif; else: echo "" ;endif; ?>
+                            </select>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -70,10 +78,11 @@
                     path         : '/static/extend/editor/lib/',
                     imageUpload : true,
                     imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                    imageUploadURL : "/static/upload/images/",
+                    imageUploadURL : "/admin/imgUpload",
                 });
                         
             });
+
             function article_submit(obj)
             {
                 var data = $('#form-article-add').serialize();
