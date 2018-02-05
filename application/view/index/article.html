@@ -1,23 +1,20 @@
 {include file="index/header" title="Ysama~文章"}
+
+<link rel="stylesheet" href="/static/extend/editor/css/editormd.preview.css" />
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3 class="col-lg-12 text-center" style="color: #fff;">Bootstrap 导航栏可以动态定位</h3>
+            <h3 class="col-lg-12 text-center" style="color: #fff;">{$article.article_title}</h3>
             <div class="col-lg-12 text-center panel-group">
-                <span class="fa fa-clock-o"> 发表于 2017/12/12 </span>
-                <span class="fa fa-eye" style="margin: 0 10px;"> 围观 12 </span>
+                <span class="fa fa-clock-o"> 发表于 {$article.create_time} </span>
+                <span class="fa fa-eye" style="margin: 0 10px;"> 围观 {$article.hits} </span>
                 <span class="fa fa-comment-o"> 活捉 66 </span>
             </div>
 
-            <div class="col-lg-12 panel-group" id="reset-img-css" style="color: #CCCCCC">
-                <p>Bootstrap 导航栏可以动态定位。默认情况下，它是块级元素，它是基于在 HTML 中放置的位置定位的。通过一些帮助器类，您可以把它放置在页面的顶部或者底部，或者您可以让它成为随着页面一起滚动的静态导航栏。
-如果您想要让导航栏固定在页面的顶部，请向 .navbar class 添加 class .navbar-fixed-top。下面的实例演示了这点：
-                </p>
-                <img class="img-thumbnail " src="/static/picture/bg-img.jpg" />
-                <p>Bootstrap 导航栏可以动态定位。默认情况下，它是块级元素，它是基于在 HTML 中放置的位置定位的。通过一些帮助器类，您可以把它放置在页面的顶部或者底部，或者您可以让它成为随着页面一起滚动的静态导航栏。
-如果您想要让导航栏固定在页面的顶部，请向 .navbar class 添加 class .navbar-fixed-top。下面的实例演示了这点：
-                </p>
-                <img class="img-thumbnail " src="/static/picture/bg-img.jpg" />
+            <div class="col-lg-12 panel-group">
+                <div id="test-editormd-view2" style="background: #222;color: #CCCCCC">
+                    <textarea id="append-test" style="display:none;">{$article.article_con}</textarea>          
+                </div>
             </div>
             <div class="col-lg-12 panel-group" style="border: 1px solid #ccc;height: 1px;border-radius: 50%;"></div>
 
@@ -36,7 +33,7 @@
                     <div class="col-lg-12">
                         <a href=""><img class="img-circle" width="50px" height="50px" src="/static/picture/test.png" style="float: left;" /></a>
                         <h3 class="col-lg-9" style="margin: 0 0 5px"><a href="">Gilgamesh</a></h3>
-                        <div class="pull-right"><button type="button" class="btn btn-default btn-xs reset-btn">回复</button></div>
+                        <div class="pull-right"><button type="button" class="btn btn-default btn-xs reset-btn">Reply</button></div>
                         <div class="col-lg-10">
                             <span class="fa fa-clock-o" style="margin-right: 10px;"> 发表于 2017/12/12 </span>
                             <span class="fa fa-map-marker"> IP:中国广东 </span>
@@ -59,7 +56,7 @@
                     <div class="col-lg-12">
                         <a href=""><img class="img-circle" width="50px" height="50px" src="/static/picture/test.png" style="float: left;" /></a>
                         <h3 class="col-lg-9" style="margin: 0 0 5px"><a href="">Gilgamesh</a></h3>
-                        <div class="pull-right"><button type="button" class="btn btn-default btn-xs reset-btn">回复</button></div>
+                        <div class="pull-right"><button type="button" class="btn btn-default btn-xs reset-btn">Reply</button></div>
                         <div class="col-lg-10">
                             <span class="fa fa-clock-o" style="margin-right: 10px;"> 发表于 2017/12/12 </span>
                             <span class="fa fa-map-marker"> IP:中国广东 </span>
@@ -80,12 +77,13 @@
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
             <blockquote style="padding: 5px 20px;">
-              <h4>发表评论</h4>
+              <h3>Comment</h3>
             </blockquote>
         </div>
-        <form class="col-lg-8 col-lg-offset-2" role="form">
+        <form id="reply-form" action="/admin/reply" class="col-lg-8 col-lg-offset-2" role="form">
             <div class="col-lg-4 panel-group">
                 <input type="text" name="name" class="form-control" placeholder="Nickname">
+                <input type="hidden" name="article_id" value="{$article.id}">
             </div>
             <div class="col-lg-4 panel-group">
                 <input type="text" name="email" class="form-control" placeholder="Email">
@@ -97,22 +95,60 @@
                 <textarea class="form-control" rows="6" placeholder="Can you write something here..."></textarea>
             </div>
             <div class="col-lg-12">
-                <button type="button" class="btn btn-default btn-sm pull-right">回复</button>
+                <button type="button" class="btn btn-default btn-sm pull-right" onclick="ajax('#reply-form')">Reply</button>
             </div>
         </form>
     </div>
-
-    <script type="text/javascript">
-        function reset_img_css() {
-            var a = document.getElementById('reset-img-css').getElementsByTagName('img');
-            for (var i = 0; i < a.length; i++) {
-                a[i].className += 'checkbox';
-            }
-        }
-        reset_img_css();
-    </script>
 </div>
-
-
-
+<script src="/static/extend/editor/examples/js/jquery.min.js"></script>
+<script src="/static/extend/editor/lib/marked.min.js"></script>
+<script src="/static/extend/editor/lib/prettify.min.js"></script>
+<script src="/static/extend/editor/lib/raphael.min.js"></script>
+<script src="/static/extend/editor/lib/underscore.min.js"></script>
+<script src="/static/extend/editor/lib/sequence-diagram.min.js"></script>
+<script src="/static/extend/editor/lib/flowchart.min.js"></script>
+<script src="/static/extend/editor/lib/jquery.flowchart.min.js"></script>
+<script src="/static/js/ajax.js"></script>
+<script src="/static/extend/editor/editormd.js"></script>
+<script type="text/javascript">
+            $(function() {
+                var testEditormdView, testEditormdView2;
+                
+                $.get("test.md", function(markdown) {
+                    
+                    testEditormdView = editormd.markdownToHTML("test-editormd-view", {
+                        markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
+                        htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                        htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                        //toc             : false,
+                        tocm            : true,    // Using [TOCM]
+                        //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+                        //gfm             : false,
+                        //tocDropdown     : true,
+                        // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
+                        emoji           : true,
+                        taskList        : true,
+                        tex             : true,  // 默认不解析
+                        flowChart       : true,  // 默认不解析
+                        sequenceDiagram : true,  // 默认不解析
+                    });
+                    
+                    //console.log("返回一个 jQuery 实例 =>", testEditormdView);
+                    
+                    // 获取Markdown源码
+                    //console.log(testEditormdView.getMarkdown());
+                    
+                    //alert(testEditormdView.getMarkdown());
+                });
+                    
+                testEditormdView2 = editormd.markdownToHTML("test-editormd-view2", {
+                    htmlDecode      : "style,script,iframe",  // you can filter tags decode
+                    emoji           : true,
+                    taskList        : true,
+                    tex             : true,  // 默认不解析
+                    flowChart       : true,  // 默认不解析
+                    sequenceDiagram : true,  // 默认不解析
+                });
+            });
+        </script>
 {include file="index/footer"}

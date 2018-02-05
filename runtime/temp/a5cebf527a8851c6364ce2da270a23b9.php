@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:79:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article.html";i:1517497788;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:1:{s:79:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article.html";i:1517589146;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh">
     <head>
@@ -48,7 +48,7 @@
                     
 				    testEditormdView = editormd.markdownToHTML("test-editormd-view", {
                         markdown        : markdown ,//+ "\r\n" + $("#append-test").text(),
-                        //htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
+                        htmlDecode      : true,       // 开启 HTML 标签解析，为了安全性，默认不开启
                         htmlDecode      : "style,script,iframe",  // you can filter tags decode
                         //toc             : false,
                         tocm            : true,    // Using [TOCM]

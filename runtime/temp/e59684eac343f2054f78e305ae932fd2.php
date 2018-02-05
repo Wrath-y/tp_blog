@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:84:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_list.html";i:1517411070;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\header.html";i:1516718356;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:84:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_list.html";i:1517671436;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\header.html";i:1516718356;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -146,8 +146,9 @@ function article_del(obj,id){
 function article_stop(obj,id){
 	layer.confirm('确认要下架吗？',function(index){
 		$.ajax({
-			url: '/admin/article_status/'+id+'/hid',
-			type: 'get',
+			url: '/admin/article_status',
+			type: 'post',
+			data: {id:id,action:'hid'},
 			dataType: 'json',
 			success: function(data){
 				if (data.code == 2000) {
@@ -165,8 +166,9 @@ function article_stop(obj,id){
 function article_start(obj,id){
 	layer.confirm('确认要发布吗？',function(index){
 		$.ajax({
-			url: '/admin/article_status/'+id+'/active',
-			type: 'get',
+			url: '/admin/article_status',
+			type: 'post',
+			data: {id:id,action:'active'},
 			dataType: 'json',
 			success: function(data){
 				if (data.code == 2000) {

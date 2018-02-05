@@ -18,8 +18,9 @@ class Article extends Model
 		if (!empty($status)) {
 			if (!empty($id)) {
 				$res = $sql->where('a.status',$status)->where('a.id', $id)->select();
+
 			} else {
-				$res = $sql->where('a.status',$status)->paginate(15);
+				$res = $sql->where('a.status',$status)->order('id DESC')->paginate(3);
 			}
 		} 
 		//后台显示

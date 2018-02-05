@@ -1,14 +1,23 @@
 <?php
 namespace app\controller;
 
-class IndexController
+use think\Controller;
+use think\Request;
+use app\model\Article;
+
+class IndexController extends Controller
 {
     public function index()
     {
+        $list = Article::article_res(1);
+        $this->assign('list', $list);
         return view();
     }
     public function article()
     {
+        $id = Request::instance()->param('id');
+        $article = Article::article_res(1,$id)[0];
+        $this->assign('article', $article);
     	return view();
     }
     public function music()

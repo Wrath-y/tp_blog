@@ -4,6 +4,7 @@ use think\Request;
 use think\Controller;
 use think\Db;
 use app\model\Article;
+use qiniu\Qiniu;
 
 class AdminController extends Controller
 {
@@ -40,8 +41,10 @@ class AdminController extends Controller
             return view('admin/article_list');
         }
     }
-    public function article_status($id,$action)
+    public function article_status()
     {
+        $id = Request::instance()->param('id');
+        $action = Request::instance()->param('action');
         $res = Article::change_article_status($id,$action);
         return json([
             'code'=>'2000',
@@ -100,8 +103,13 @@ class AdminController extends Controller
         }
         if (Request::instance()->isAjax()) {
             $data['article_title'] = Request::instance()->param('title');
-            $data['article_con'] = Request::instance()->param('editormd-markdown-doc');
+            $data['article_con'] = Request::instance()->param('article_con');
             $data['category'] = Request::instance()->param('category');
+            $data['article_html'] = Request::instance()->param('html');
+            preg_match('/[\s\S]*?<img src="(.+?)"[\s\S]*?/i', $data['article_html'], $img_src);
+            if ($img_src) {
+                $data['img'] = $img_src[1];
+            }
             if (Request::instance()->param('id')) {
                 $id = Request::instance()->param('id');
             } else {
@@ -139,6 +147,11 @@ class AdminController extends Controller
         
     	return view();
     }
+    public function get_img_token()
+    {
+        $token = (new Qiniu())->get_img_token();
+        return $token;
+    }
     public function del()
     {
         $id = Request::instance()->param('id');
@@ -167,7 +180,7 @@ class AdminController extends Controller
     public function imgUpload()
     {
         $guid = Request::instance()->param('guid');
-        $file = Request::instance()->file('editormd-image-file');
+        $file = Request::instance()->file('file');
         if($file){
             $info = $file->move(ROOT_PATH . 'public' . DS . 'static'. DS . 'upload' . DS . 'images');
             if($info){
@@ -190,6 +203,33 @@ class AdminController extends Controller
     */
     public function picture()
     {
-        
+        $domain = Request::instance()->domain();
+        $dir = ROOT_PATH . 'public' . DS . 'static' . DS . 'upload' . DS . 'images' . DS;
+        /**
+        * scandir($dir)
+        * array(3) {
+        *      [0] => string(1) "."
+        *      [1] => string(2) ".."
+        *      [2] => string(8) "20180201"
+        *    }
+        */
+        $dir_nums = scandir($dir);
+        for ($i=2; $i < count($dir_nums); $i++) {
+            $dir_[$i - 2] = $dir . $dir_nums[$i] . DS;
+            $picture[$i - 2] = scandir($dir_[$i - 2])[2];
+            $true_dir[$i - 2]['dir'] = DS . 'static' . DS . 'upload' . DS . 'images' . DS . $dir_nums[$i] . DS . $picture[$i - 2];
+        }
+        $this->assign('true_dir', $true_dir);
+        $this->assign('nums', count($dir_nums));
+        return view();
+    }
+    //评论
+    public function reply()
+    {
+        $data = Request::instance()->param();
+        return json([
+            'code' => 2000,
+            'msg' => '提交成功'
+        ]);
     }
 }

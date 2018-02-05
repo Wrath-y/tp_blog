@@ -35,39 +35,35 @@
     </nav>
 </header>
 <div class="container">
+    {volist name="list" id="vo"}
     <div class="row" style="margin-bottom: 40px">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3 class="col-lg-12 text-center"><a href="{:url('article')}" style="color: #999999">Bootstrap 导航栏可以动态定位</a></h3>
+            <h3 class="col-lg-12 text-center"><a href="{:url('article',['id'=>$vo.id])}" style="color: #999999">{$vo.article_title}</a></h3>
             <div class="col-lg-12 text-center panel-group">
-                <span class="fa fa-clock-o"> 发表于 2017/12/12 </span>
-                <span class="fa fa-eye" style="margin: 0 10px;"> 围观 12 </span>
+                <span class="fa fa-clock-o"> {$vo.create_time|date="Y-m-d H:i:s",###} </span>
+                <span class="fa fa-eye" style="margin: 0 10px;"> 围观 {$vo.hits} </span>
                 <span class="fa fa-comment-o"> 活捉 66 </span>
             </div>
             <div class="col-lg-12 panel-group">
-                <img class="img-thumbnail" src="/static/picture/bg-img.jpg" />
+                {notempty name="vo.img"}
+                    <img class="img-thumbnail" src="{$vo.img}" />
+                {/notempty}
             </div>
             <div class="col-lg-12">
-                <p style="color: #CCCCCC">Bootstrap 导航栏可以动态定位。默认情况下，它是块级元素，它是基于在 HTML 中放置的位置定位的。通过一些帮助器类，您可以把它放置在页面的顶部或者底部，或者您可以让它成为随着页面一起滚动的静态导航栏。
-如果您想要让导航栏固定在页面的顶部，请向 .navbar class 添加 class .navbar-fixed-top。下面的实例演示了这点：</p>
+                <p style="color: #CCCCCC">{$vo.article_html | strip_tags|subtext = 200}</p>
             </div>
             <div class="col-lg-12 text-center">
-                <a href="" style="color: #666666">阅读全文</a>
+                <a href="/index/article&id={$vo.id}" style="color: #666666">阅读全文</a>
             </div>
         </div>
     </div>
+    {/volist}
 
 
     <div class="col-lg-8 col-lg-offset-2 text-center">
-        <ul class="pagination">
-            <li><a href="#">&laquo;</a></li>
-            <li class="active"><a href="#">1</a></li>
-            <li><a href="#">2</a></li>
-            <li><a href="#">3</a></li>
-            <li><a href="#">4</a></li>
-            <li><a href="#">5</a></li>
-            <li><a href="#">&raquo;</a></li>
-        </ul>
+        {$list->render()}
     </div>
+    
 </div>
 
 

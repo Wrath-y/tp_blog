@@ -39,8 +39,16 @@
             if (editor.find("." + dialogName).length < 1)
             {
                 var guid   = (new Date).getTime();
-                var action = settings.imageUploadURL + (settings.imageUploadURL.indexOf("?") >= 0 ? "&" : "?") + "guid=" + guid;
-
+                var action = settings.imageUploadURL;// + (settings.imageUploadURL.indexOf("?") >= 0 ? "&" : "?") + "guid=" + guid;
+                var token;
+                $.ajax({
+                    url: '/admin/get_img_token',
+                    type: 'get',
+                    async: false,
+                    success:function(data) {
+                        Math.token = data;
+                    }
+                });
                 if (settings.crossDomainUpload)
                 {
                     action += "&callback=" + settings.uploadCallbackURL + "&dialog_id=editormd-image-dialog-" + guid;
@@ -48,10 +56,10 @@
 
                 var dialogContent = ( (settings.imageUpload) ? "<form action=\"" + action +"\" target=\"" + iframeName + "\" method=\"post\" enctype=\"multipart/form-data\" class=\"" + classPrefix + "form\">" : "<div class=\"" + classPrefix + "form\">" ) +
                                         ( (settings.imageUpload) ? "<iframe name=\"" + iframeName + "\" id=\"" + iframeName + "\" guid=\"" + guid + "\"></iframe>" : "" ) +
-                                        "<label>" + imageLang.url + "</label>" +
-                                        "<input type=\"text\" data-url />" + (function(){
+                                        "<label>" + imageLang.url + "</label>" + '<input name="key" id="zzzy2" type="hidden" value=""><input name="token" type="hidden" value="'+Math.token+'">'+
+                                        "<input id=\"zzzy\" type=\"text\" data-url />" + (function(){
                                             return (settings.imageUpload) ? "<div class=\"" + classPrefix + "file-input\">" +
-                                                                                "<input type=\"file\" name=\"" + classPrefix + "image-file\" accept=\"image/*\" />" +
+                                                                                "<input id=\"zy\" type=\"file\" name=\"file\" accept=\"image/*\" />" +
                                                                                 "<input type=\"submit\" value=\"" + imageLang.uploadButton + "\" />" +
                                                                             "</div>" : "";
                                         })() +
@@ -125,12 +133,13 @@
                     return ;
                 }
 
-				var fileInput  = dialog.find("[name=\"" + classPrefix + "image-file\"]");
-
+				var fileInput  = dialog.find("[name=\"file\"]");
 				fileInput.bind("change", function() {
 					var fileName  = fileInput.val();
 					var isImage   = new RegExp("(\\.(" + settings.imageFormats.join("|") + "))$"); // /(\.(webp|jpg|jpeg|gif|bmp|png))$/
-
+                    file_name = $("#zy").val().replace(/^.+?\\([^\\]+?\.[^\.\\]*?)?$/gi,"$1");
+                    $("#zzzy").val('http://o90jk9gyr.bkt.clouddn.com/'+file_name);
+                    $("#zzzy2").val(file_name);
 					if (fileName === "")
 					{
 						alert(imageLang.uploadFileEmpty);

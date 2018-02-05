@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:84:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_edit.html";i:1517496108;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:84:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_edit.html";i:1517665166;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh">
     <head>
@@ -78,18 +78,23 @@
                     path         : '/static/extend/editor/lib/',
                     imageUpload : true,
                     imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                    imageUploadURL : "/admin/imgUpload",
+                    imageUploadURL : "http://up.qiniu.com",
                 });
                         
             });
 
             function article_submit(obj)
             {
-                var data = $('#form-article-add').serialize();
+                var title = $('input[name="title"]').val();
+                var id = $('input[name="id"]').val();
+                var category = $('.form-control').val();
+                var article_con = $('textarea').val();
+                var html = $('.editormd-preview-container').html();
                 layer.confirm('确认要保存吗？',function(index){
                     $.ajax({
-                        url: '/admin/article_edit&'+data,
-                        type: 'get',
+                        url: '/admin/article_edit',
+                        type: 'post',
+                        data: {id:id,title:title,category:category,article_con:article_con,html:html},
                         dataType: 'json',
                         success: function(data){
                             if (data.code == 2000) {
