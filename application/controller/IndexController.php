@@ -5,9 +5,36 @@ use think\Controller;
 use think\Request;
 use app\model\Article;
 use think\Db;
+use think\Session;
 
 class IndexController extends Controller
 {
+    public function login() {
+        if (Request::instance()->isAjax()) {
+            $param = Request::instance()->param();
+            $result = Db::table('user')->where('username', $param['username'])->value('passwd');
+            if ($result) {
+                    if ($result === md5($param['passwd']) ) {
+                        Session::set('user',$param['username']);
+                        return json([
+                            'code' => 2000,
+                            'msg' => "登陆成功"
+                        ]);
+                } else {
+                    return json([
+                        'code' => 2004,
+                        'msg' => "密码错误"
+                    ]);
+                }
+            } else {
+                return json([
+                    'code' => 2005,
+                    'msg' => "用户名错误"
+                ]);  
+            }
+        }
+        return view('admin/login');
+    }
     public function index()
     {
         $list = Article::article_res(1);
@@ -19,6 +46,7 @@ class IndexController extends Controller
         $id = Request::instance()->param('id');
         $article = Article::article_res(1,$id)[0];
         $this->assign('article', $article);
+        Article::where('id', $id)->setInc('hits');
     	return view();
     }
     public function music()

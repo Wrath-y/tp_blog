@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:77:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\index\index.html";i:1519369946;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\index\footer.html";i:1517676332;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:77:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\index\index.html";i:1519702430;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\index\footer.html";i:1517676332;}*/ ?>
 ﻿<!DOCTYPE html>
 <html>
 <head>
@@ -24,12 +24,12 @@
             </div>
             <div class="col-lg-8 col-lg-offset-2 collapse navbar-collapse" id="example-navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="<?php echo url('index'); ?>">首页</a></li>
-                    <li><a href="<?php echo url('music'); ?>">音乐</a></li>
-                    <li><a href="<?php echo url('psn'); ?>">PSN</a></li>
-                    <li><a href="<?php echo url('link'); ?>">链接</a></li>
-                    <li><a href="<?php echo url('message'); ?>">留言板</a></li>
-                    <li><a href="<?php echo url('about'); ?>">关于我</a></li>
+                    <li class="active"><a href="/">首页</a></li>
+                    <li><a href="/music">音乐</a></li>
+                    <li><a href="/psn">PSN</a></li>
+                    <li><a href="/link">链接</a></li>
+                    <li><a href="/message">留言板</a></li>
+                    <li><a href="/about">关于我</a></li>
                 </ul>
             </div>
         </div>
@@ -39,7 +39,7 @@
     <?php if(is_array($list) || $list instanceof \think\Collection || $list instanceof \think\Paginator): $i = 0; $__LIST__ = $list;if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vo): $mod = ($i % 2 );++$i;?>
     <div class="row" style="margin-bottom: 40px">
         <div class="col-lg-8 col-lg-offset-2">
-            <h3 class="col-lg-12 text-center"><a href="<?php echo url('article',['id'=>$vo['id']]); ?>" style="color: #999999"><?php echo $vo['article_title']; ?></a></h3>
+            <h3 class="col-lg-12 text-center"><a href="/<?php echo $vo['id']; ?>" style="color: #999999"><?php echo $vo['article_title']; ?></a></h3>
             <div class="col-lg-12 text-center panel-group">
                 <span class="fa fa-clock-o"> <?php echo date("Y-m-d H:i:s",$vo['create_time']); ?> </span>
                 <span class="fa fa-eye" style="margin: 0 10px;"> 围观 <?php echo $vo['hits']; ?> 次</span>
@@ -55,7 +55,7 @@
                 <p style="color: #CCCCCC"><?php echo subtext(strip_tags($vo['article_html'] ), 200); ?></p>
             </div>
             <div class="col-lg-12 text-center">
-                <a href="/index/article&id=<?php echo $vo['id']; ?>" style="color: #666666">阅读全文</a>
+                <a href="/<?php echo $vo['id']; ?>" style="color: #666666">阅读全文</a>
             </div>
         </div>
     </div>

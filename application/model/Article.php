@@ -20,7 +20,7 @@ class Article extends Model
 				$res = $sql->where('a.status',$status)->where('a.id', $id)->select();
 
 			} else {
-				$res = $sql->where('a.status',$status)->order('id DESC')->paginate(3);
+				$res = $sql->where('a.status',$status)->order('id DESC')->paginate(6);
 			}
 		} 
 		//后台显示

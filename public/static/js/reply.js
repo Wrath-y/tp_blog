@@ -58,7 +58,7 @@ function reply_submit(obj,pid=false)
 function reply_get(id)
 {
 	$.ajax({
-		url: '/index/reply_get&id='+id,
+		url: '/index/reply_get/'+id,
 		type: 'get',
 		dataType: 'json',
 		success: function(data) {

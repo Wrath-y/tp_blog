@@ -6,10 +6,23 @@ use think\Db;
 use app\model\Article;
 use app\model\Reply;
 use app\service\Action;
+use think\Session;
 use qiniu\Qiniu;
 
 class AdminController extends Controller
 {
+    public function _initialize()
+    {
+        if (!Session::has('user')) {
+            return $this->error('请登录','/login');
+        }
+    }
+    //注销登陆
+    public function unsetse()
+    {
+        Session::delete('user');
+        die("<script>location.href='/';</script>");
+    }
     public function index()
     {
         return view();

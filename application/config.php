@@ -84,13 +84,13 @@ return [
     // URL伪静态后缀
     'url_html_suffix'        => 'html',
     // URL普通方式参数 用于自动生成
-    'url_common_param'       => false,
+    'url_common_param'       => true,
     // URL参数方式 0 按名称成对解析 1 按顺序解析
-    'url_param_type'         => 0,
+    'url_param_type'         => 1,
     // 是否开启路由
     'url_route_on'           => true,
     // 路由使用完整匹配
-    'route_complete_match'   => false,
+    'route_complete_match'   => true,
     // 路由配置文件（支持配置多个）
     'route_config_file'      => ['route'],
     // 是否强制使用路由
@@ -113,9 +113,6 @@ return [
     'request_cache'          => false,
     // 请求缓存有效期
     'request_cache_expire'   => null,
-    // 全局请求缓存排除规则
-    'request_cache_except'   => [],
-
     // +----------------------------------------------------------------------
     // | 模板设置
     // +----------------------------------------------------------------------
@@ -236,7 +233,7 @@ return [
     //分页配置
     'paginate'               => [
         'type'      => 'bootstrap',
-        'var_page'  => 'page',
-        'list_rows' => 15,
+        'var_page'  => 'p',
+        'list_rows' => 3,
     ],
 ];
