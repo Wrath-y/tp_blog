@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:93:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_category_edit.html";i:1517143418;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\header.html";i:1516718356;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:3:{s:93:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_category_edit.html";i:1519378124;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\header.html";i:1516718356;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -27,7 +27,7 @@
 	<form class="form form-horizontal" id="form-admin-add">
 	<div class="row cl">
 		<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>分类名：</label>
-		<div class="formControls col-xs-8 col-sm-9">
+		<div class="formControls col-xs-8 col-sm-7">
 			<?php if(isset($name)): ?>
 				<input type="text" class="input-text" value="<?php echo $name['name']; ?>" id="name" name="name">
 			<?php else: ?>

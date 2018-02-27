@@ -6,77 +6,65 @@
     a:hover,a:link,a:visited {
         color: inherit;
     }
+    #music-list td {
+        width:100%;
+        word-break:keep-all;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
 </style>
 <div class="container">
-    <div class="col-lg-8 col-lg-offset-2 panel-group">
-        <div>
-            <img class="img-rounded" src="/static/picture/test.png" style="float: left;" />
-        </div>
-        <div class="col-lg-10">
-            <h3 class="col-lg-3 text-center" style="margin: 0 0 5px"><a class="col-lg-12" href="">伊飘雪</a></h3>
-            <div class="col-lg-12" style="border-top: 1px solid #ccc;height: 1px;border-radius: 49%;margin: 5px 0;"></div>
-            <div class="col-lg-12">
-                <a class="col-lg-2 text-center" style="" href=""><strong>12</strong><br><span>动态</span></a>
-                <a class="col-lg-2 text-center" href=""><strong>12</strong><br><span>关注</span></a>
-                <a class="col-lg-2 text-center" href=""><strong>12</strong><br><span>粉丝</span></a>
-            </div>
-        </div>
-    </div>
+    <div class="col-lg-8 col-lg-offset-2 panel-group userinfo"></div>
     <div class="col-lg-8 col-lg-offset-2 panel-group" style="border: 1px solid #ccc;height: 1px;border-radius: 50%;"></div>
     <div class="col-lg-8 col-lg-offset-2">
-        <table class="table">
+        <table class="table" style="table-layout:fixed;">
             <caption>所有音乐</caption>
             <thead>
                 <tr>
                     <th width="5%">#</th>
                     <th width="30%">Music Name</th>
                     <th width="30%">Singer Name</th>
-                    <th width="35%">Times</th>
+                    <th width="35%">Album</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <th>1</th>
-                    <td><a href="javascript:void(0);">Mark</a></td>
-                    <td><a href="javascript:void(0);">Otto</a></td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" 
-                                aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                <span class="sr-only">40% 完成</span>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="active">
-                    <th>2</th>
-                    <td><a href="javascript:void(0);">Mark</a></td>
-                    <td><a href="javascript:void(0);">Thornton</a></td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" 
-                                aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                <span class="sr-only">40% 完成</span>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <th>3</th>
-                    <td><a href="javascript:void(0);">Mark</a></td>
-                    <td><a href="javascript:void(0);">the Bird</a></td>
-                    <td>
-                        <div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="60" 
-                                aria-valuemin="0" aria-valuemax="100" style="width: 40%;">
-                                <span class="sr-only">40% 完成</span>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+            <tbody id="music-list">
             </tbody>
         </table>
+        <div id="music-pagin" class="text-center"></div>
+        <iframe class="music_163" frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src=""></iframe>
+
     </div>
 </div>
 
 {include file="index/footer"}
+<link rel="stylesheet" type="text/css" href="/static/extend/layui/css/layui.css">
+<script src="/static/js/music.js"></script>
+<script src="/static/extend/layui/layui.js"></script>
+<script type="text/javascript">
+    var data = get_userinfo();
+    layui.use(['laypage', 'layer'], function(){
+      var laypage = layui.laypage,layer = layui.layer;
+      
+      //调用分页
+      laypage.render({
+        elem: 'music-pagin',
+        count: data.length,
+        jump: function(obj){
+          //渲染
+          document.getElementById('music-list').innerHTML = function(){
+            var arr = [],
+            thisData = data.concat().splice(obj.curr*obj.limit - obj.limit, obj.limit);
+            layui.each(thisData, function(index, item){
+              arr.push('<tr><th>'+item.index+'</th><td><a title="'+item.name+'" href="javascript:music_play('+item.id+');">'+item.name+'</a></td><td><a title="'+item.artists+'" href="http://music.163.com/artist?id='+item.artists_id+'">'+item.artists+'</a></td><td title="'+item.alias[0]+'">'+item.alias[0]+'</td></tr>');
+            });
+            return arr.join('');
+          }();
+        }
+      });
+  
+    });
+    function music_play(id) {
+      $('.music_163').attr("src", "//music.163.com/outchain/player?type=2&id="+ id +"&auto=1&height=66");
+    }
+</script>

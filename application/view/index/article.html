@@ -6,9 +6,10 @@
         <div class="col-lg-8 col-lg-offset-2">
             <h3 class="col-lg-12 text-center" style="color: #fff;">{$article.article_title}</h3>
             <div class="col-lg-12 text-center panel-group">
-                <span class="fa fa-clock-o"> 发表于 {$article.create_time} </span>
+                <span class="fa fa-clock-o"> 发表于 {$article.create_time|date="Y-m-d H:i:s",###} </span>
                 <span class="fa fa-eye" style="margin: 0 10px;"> 围观 {$article.hits} </span>
-                <span class="fa fa-comment-o"> 活捉 66 </span>
+                <span class="fa fa-comment-o"> 活捉 {$article.id|replyNum} </span>
+                <span class="fa fa-comment-o" style="margin: 0 10px;"><a href="" style="color: #999;"> {$article.category|category}</a></span>
             </div>
 
             <div class="col-lg-12 panel-group">
@@ -21,58 +22,12 @@
             <div class="col-lg-12 panel-group" style="border: 1px solid #ccc;height: 1px;border-radius: 50%;"></div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" id="replyList">
         <div class="col-lg-8 col-lg-offset-2">
             <blockquote style="padding: 5px 20px;">
-              <h4>捕获2条</h4>
+              <h4>活捉{$article.id|replyNum}条</h4>
             </blockquote>
         </div>
-        <div class="col-lg-8 col-lg-offset-2 reply-line">
-            <div class="col-lg-12">
-                <div class="row panel-group">
-                    <div class="col-lg-12">
-                        <a href=""><img class="img-circle" width="50px" height="50px" src="/static/picture/test.png" style="float: left;" /></a>
-                        <h3 class="col-lg-9" style="margin: 0 0 5px"><a href="">Gilgamesh</a></h3>
-                        <div class="pull-right"><button type="button" class="btn btn-default btn-xs reset-btn">Reply</button></div>
-                        <div class="col-lg-10">
-                            <span class="fa fa-clock-o" style="margin-right: 10px;"> 发表于 2017/12/12 </span>
-                            <span class="fa fa-map-marker"> IP:中国广东 </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <p class="panel-group">Bootstrap 导航栏可以动态定位。默认情况下，它是块级元素，它是基于在 HTML 中放置的位置定位的。通过一些帮助器类，您可以把它放置在页面的顶部或者底部，或者您可以让它成为随着页面一起滚动的静态导航栏。
-    如果您想要让导航栏固定在页面的顶部，请向 .navbar class 添加 class .navbar-fixed-top。下面的实例演示了这点：
-                    </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-8 col-lg-offset-2 panel-group" style="border: 1px solid #ccc;height: 1px;border-radius: 50%;"></div>
-        <div class="col-lg-8 col-lg-offset-2 reply-line">
-            <div class="col-lg-12">
-                <div class="row panel-group">
-                    <div class="col-lg-12">
-                        <a href=""><img class="img-circle" width="50px" height="50px" src="/static/picture/test.png" style="float: left;" /></a>
-                        <h3 class="col-lg-9" style="margin: 0 0 5px"><a href="">Gilgamesh</a></h3>
-                        <div class="pull-right"><button type="button" class="btn btn-default btn-xs reset-btn">Reply</button></div>
-                        <div class="col-lg-10">
-                            <span class="fa fa-clock-o" style="margin-right: 10px;"> 发表于 2017/12/12 </span>
-                            <span class="fa fa-map-marker"> IP:中国广东 </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <p class="panel-group">Bootstrap 导航栏可以动态定位。默认情况下，它是块级元素，它是基于在 HTML 中放置的位置定位的。通过一些帮助器类，您可以把它放置在页面的顶部或者底部，或者您可以让它成为随着页面一起滚动的静态导航栏。
-    如果您想要让导航栏固定在页面的顶部，请向 .navbar class 添加 class .navbar-fixed-top。下面的实例演示了这点：
-                    </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-8 col-lg-offset-2 panel-group" style="border: 1px solid #ccc;height: 1px;border-radius: 50%;"></div>
     </div>
     <div class="row">
         <div class="col-lg-8 col-lg-offset-2">
@@ -80,7 +35,7 @@
               <h3>Comment</h3>
             </blockquote>
         </div>
-        <form id="reply-form" action="/admin/reply" class="col-lg-8 col-lg-offset-2" role="form">
+        <form id="reply-form" action="" class="col-lg-8 col-lg-offset-2" role="form">
             <div class="col-lg-4 panel-group">
                 <input type="text" name="name" class="form-control" placeholder="Nickname">
                 <input type="hidden" name="article_id" value="{$article.id}">
@@ -89,13 +44,13 @@
                 <input type="text" name="email" class="form-control" placeholder="Email">
             </div>
             <div class="col-lg-4 panel-group">
-                <input type="text" name="website" class="form-control" placeholder="Website">
+                <input type="text" name="url" class="form-control" placeholder="Website">
             </div>
             <div class="col-lg-12 panel-group">
-                <textarea class="form-control" rows="6" placeholder="Can you write something here..."></textarea>
+                <textarea name="reply_info" class="form-control reply-box" rows="6" placeholder="Can you write something here..."></textarea>
             </div>
             <div class="col-lg-12">
-                <button type="button" class="btn btn-default btn-sm pull-right" onclick="ajax('#reply-form')">Reply</button>
+                <button type="button" class="btn btn-default btn-sm pull-right" onclick="reply_submit('#reply-form')">Reply</button>
             </div>
         </form>
     </div>
@@ -108,9 +63,11 @@
 <script src="/static/extend/editor/lib/sequence-diagram.min.js"></script>
 <script src="/static/extend/editor/lib/flowchart.min.js"></script>
 <script src="/static/extend/editor/lib/jquery.flowchart.min.js"></script>
-<script src="/static/js/ajax.js"></script>
+<script src="/static/js/reply.js"></script>
+<script src="http://cdn.bootcss.com/blueimp-md5/1.1.0/js/md5.min.js"></script>
 <script src="/static/extend/editor/editormd.js"></script>
 <script type="text/javascript">
+            reply_get({$article.id});
             $(function() {
                 var testEditormdView, testEditormdView2;
                 

@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:77:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\index\index.html";i:1517673366;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\index\footer.html";i:1515810002;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:77:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\index\index.html";i:1519369946;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\index\footer.html";i:1517676332;}*/ ?>
 ﻿<!DOCTYPE html>
 <html>
 <head>
@@ -27,9 +27,9 @@
                     <li class="active"><a href="<?php echo url('index'); ?>">首页</a></li>
                     <li><a href="<?php echo url('music'); ?>">音乐</a></li>
                     <li><a href="<?php echo url('psn'); ?>">PSN</a></li>
-                    <li><a href="#">链接</a></li>
-                    <li><a href="#">留言板</a></li>
-                    <li><a href="#">关于我</a></li>
+                    <li><a href="<?php echo url('link'); ?>">链接</a></li>
+                    <li><a href="<?php echo url('message'); ?>">留言板</a></li>
+                    <li><a href="<?php echo url('about'); ?>">关于我</a></li>
                 </ul>
             </div>
         </div>
@@ -42,8 +42,9 @@
             <h3 class="col-lg-12 text-center"><a href="<?php echo url('article',['id'=>$vo['id']]); ?>" style="color: #999999"><?php echo $vo['article_title']; ?></a></h3>
             <div class="col-lg-12 text-center panel-group">
                 <span class="fa fa-clock-o"> <?php echo date("Y-m-d H:i:s",$vo['create_time']); ?> </span>
-                <span class="fa fa-eye" style="margin: 0 10px;"> 围观 <?php echo $vo['hits']; ?> </span>
-                <span class="fa fa-comment-o"> 活捉 66 </span>
+                <span class="fa fa-eye" style="margin: 0 10px;"> 围观 <?php echo $vo['hits']; ?> 次</span>
+                <span class="fa fa-comment-o"> 活捉 <?php echo replyNum($vo['id']); ?> 条</span>
+                <span class="fa fa-comment-o" style="margin: 0 10px;"><a href="" style="color: #999;"> <?php echo category($vo['category']); ?></a></span>
             </div>
             <div class="col-lg-12 panel-group">
                 <?php if(!(empty($vo['img']) || (($vo['img'] instanceof \think\Collection || $vo['img'] instanceof \think\Paginator ) && $vo['img']->isEmpty()))): ?>
@@ -75,6 +76,7 @@
 </footer>
 <script src="/static/js/jquery.js"></script>
 <script src="/static/js/bootstrap.js"></script>
+<script src="/static/extend/layer/layer.js"></script>
 <script type="text/javascript">
         function set_height() {
             $width = $(".bg-img").width();

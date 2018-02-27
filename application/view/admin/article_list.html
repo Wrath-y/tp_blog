@@ -111,10 +111,9 @@ function article_del(obj,id){
 				if (data.code = 2000) {
 					$(obj).parents("tr").remove();
 					layer.msg(data.msg,{icon:1,time:1000});
+				} else {
+					layer.msg('删除失败',{icon:2,time:1000});
 				}
-			},
-			error:function(data) {
-				layer.msg('删除失败',{icon:2,time:1000});
 			},
 		});		
 	});

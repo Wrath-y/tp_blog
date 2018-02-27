@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:84:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_edit.html";i:1517665166;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:2:{s:84:"G:\PortableApps\PHPstudy\WWW\blog\public/../application/view\admin\article_edit.html";i:1517927030;s:68:"G:\PortableApps\PHPstudy\WWW\blog\application\view\admin\footer.html";i:1516717608;}*/ ?>
 <!DOCTYPE html>
 <html lang="zh">
     <head>
@@ -100,7 +100,7 @@
                             if (data.code == 2000) {
                                 layer.msg(data.msg,{icon: 6,time:1000});
                             } else {
-                                layer.msg(data.msg+',错误代码'+data.code,{icon: 6,time:1000});
+                                layer.msg(data.msg+',错误代码'+data.code,{icon: 5,time:1000});
                             }
                         }
                     });

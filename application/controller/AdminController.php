@@ -4,6 +4,8 @@ use think\Request;
 use think\Controller;
 use think\Db;
 use app\model\Article;
+use app\model\Reply;
+use app\service\Action;
 use qiniu\Qiniu;
 
 class AdminController extends Controller
@@ -157,10 +159,13 @@ class AdminController extends Controller
         $id = Request::instance()->param('id');
         $table = Request::instance()->param('table');
         if ($table === 'article') {
-            $res = Article::del($id, $table);
+            $res = Action::del($id, $table);
         }
         if ($table === 'article_category') {
-            $res = Article::del($id, $table);
+            $res = Action::del($id, $table);
+        }
+        if ($table === 'reply') {
+            $res = Action::del($id, $table);
         }
         if ($res != 0) {
             return json([
@@ -223,13 +228,47 @@ class AdminController extends Controller
         $this->assign('nums', count($dir_nums));
         return view();
     }
-    //评论
+    /**
+    * 评论管理
+    */
     public function reply()
     {
-        $data = Request::instance()->param();
-        return json([
-            'code' => 2000,
-            'msg' => '提交成功'
-        ]);
+        $res = Reply::reply_res();
+        $this->assign('list', $res);
+        return view();
+    }
+    /**
+    * 友情链接管理
+    */
+    public function link()
+    {
+        $instance = Request::instance();
+        $action = $instance->param('action');
+        if ($action === 'add') {
+            return view('admin/link_edit');
+        }
+        if ($action === 'edit') {
+            $id = $instance->param('id');
+            $data = Db::table('harem')->where('id', $id)->find();
+            return view('admin/link_edit',[
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'url' => $data['url']
+            ]);
+        }
+        if ($instance->isAjax()) {
+            $data = $instance->param();
+            $data['create_time'] = time();
+            $res = Db::table('harem')->insert($data);
+            if ($res) {
+                return json([
+                    'code' => 2000,
+                    'msg' => '添加成功'
+                ]);
+            }
+        }
+        $res = Db::table('harem')->paginate(15);
+        $this->assign('list', $res);
+        return view();
     }
 }

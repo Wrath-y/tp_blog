@@ -19,11 +19,12 @@ class CurlController
      * @param boolean $https 判断是否为https
      * @return json
      */
-    private function curl_request($url,$header='',$cookie='',$post_data='',$https=false)
+    private function curl_request($url,$header,$cookie='',$post_data='',$https=false)
     {
         $ch = curl_init();
+        $header = [];
         curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, $header);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         if (!empty($cookie)) {
             //创建系统不存在的目录来存放缓存文件
             $cookieFile = tempnam('/cookie/', 'cookies');
@@ -54,30 +55,77 @@ class CurlController
     }
 
     /**
-     * 获取网易云信息
-     * @param string $vali 判断获取个人信息还是歌单信息
-     * @return json
+     * 保存网易云信息
+     * @param array $res_arr 网易云信息
      */
-    public function music($vali='')
+    public function music_save()
     {
         $url = 'http://music.163.com/api/playlist/detail?id=139310909'; //id为歌单id
         $res = $this->curl_request($url,$header='',$cookie='',$post_data='');
         $res_arr = json_decode($res, true);
-        if (!empty($vali)) {
-            $res = $res_arr['result']['creator'];
-        } else {
-            $res = $res_arr['result']['tracks'];
+        $result['creator'] = $res_arr['result']['creator'];
+        $length = count($res_arr['result']['tracks']);
+        $file = ROOT_PATH . 'public' . DS . 'static' . DS . 'json' . DS .'music.json';
+        for ($i=0; $i < $length; $i++) {
+            $result['tracks'][$i]['index'] = $i+1;
+            $result['tracks'][$i]['name'] = $res_arr['result']['tracks'][$i]['name'];
+            $result['tracks'][$i]['id'] = $res_arr['result']['tracks'][$i]['id'];
+            if (!empty($res_arr['result']['tracks'][$i]['alias'])) {
+                $result['tracks'][$i]['alias'] = $res_arr['result']['tracks'][$i]['alias'];
+            } else {
+                $result['tracks'][$i]['alias'][0] = '未知';
+            }
+            $result['tracks'][$i]['artists'] = $res_arr['result']['tracks'][$i]['artists'][0]['name'];
+            $result['tracks'][$i]['artists_id'] = $res_arr['result']['tracks'][$i]['artists'][0]['id'];
         }
-        return json($res);
+        $json = json_encode($result);
+        file_put_contents($file, $json);
+        return;
     }
-
     /**
-     * 获取psn信息
-     * @param string $vali 判断获取个人信息还是游戏信息
+     * 获取网易云信息
+     * @param array $res_arr 网易云信息
      * @return json
      */
-    public function psn($vali)
+    public function music_get()
     {
-        
+        $file = ROOT_PATH . 'public' . DS . 'static' . DS . 'json' . DS .'music.json';
+        $res = file_get_contents($file);
+        $res_arr = json_decode($res, true);
+        return json($res_arr);
+    }
+    /**
+     * 保存npsn信息
+     * @param string $time unix时间戳/ms
+     */
+    public function psn_save()
+    {
+        $time = explode (" ", microtime () );   
+        $time = $time [1] . ($time [0] * 1000);   
+        $time2 = explode ( ".", $time );   
+        $time = $time2 [0];  //unix时间戳/ms
+        $url = "https://io.playstation.com/playstation/psn/profile/public/userData?onlineId=Gilgamesh_y&_=".$time;
+        $header[] = "Referer:https://www.playstation.com/en-us/my/public-trophies/";
+        $user_data = $this->curl_request($url,$header,$cookie='',$post_data='',$https=true);
+        $url = "https://io.playstation.com/playstation/psn/public/trophies/?onlineId=Gilgamesh_y&_=".$time;
+        $online = $this->curl_request($url,$header,$cookie='',$post_data='',$https=true);
+        $user_data = json_decode($user_data, true);
+        $online = json_decode($online, true);
+        $res['userData'] = $user_data;
+        $res['online'] = $online;
+        $json = json_encode($res);
+        $file = ROOT_PATH . 'public' . DS . 'static' . DS . 'json' . DS .'psn.json';
+        file_put_contents($file, $json);
+    }
+    /**
+     * 获取psn信息
+     * @return json
+     */
+    public function psn_get()
+    {
+        $file = ROOT_PATH . 'public' . DS . 'static' . DS . 'json' . DS .'psn.json';
+        $res = file_get_contents($file);
+        $res_arr = json_decode($res, true);
+        return json($res_arr);
     }
 }

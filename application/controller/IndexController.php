@@ -4,6 +4,7 @@ namespace app\controller;
 use think\Controller;
 use think\Request;
 use app\model\Article;
+use think\Db;
 
 class IndexController extends Controller
 {
@@ -28,15 +29,41 @@ class IndexController extends Controller
     {
         return view();
     }
-    public function money($user)
+    public function link()
     {
-        $data = db('money')->where('user',$user)->order('create_time desc')->select();
-        $zAll = array_sum($data['z']);
-        $gaAll = array_sum($data['ga']);
-        return json_encode([
-            $user.'总共支出:'=>$data['all'],
-            'z占了其中:'=>$zAll,
-            'ga占了其中:'=>$gaAll
+        $data = Db::table('harem')->select();
+        $this->assign('link', $data);
+        return view();
+    }
+    public function message()
+    {
+        $res = Article::article_res('',1)[0];
+        $this->assign('article', $res);
+        return view('article');
+    }
+    public function about()
+    {
+        $res = Article::article_res('',2)[0];
+        $this->assign('article', $res);
+        return view('article');
+    }
+    //评论
+    public function reply_submit()
+    {
+        $data = Request::instance()->param();
+        $data['create_time'] = time();
+        $res = Db::table('reply')->insert($data);
+        return json([
+            'code' => 2000,
+            'msg' => '提交成功'
+        ]);
+    }
+    public function reply_get($id)
+    {
+        $data = Db::table('reply')->where('article_id', $id)->order('id desc')->paginate(10);
+        return json([
+            'code' => 2000,
+            'msg' => $data
         ]);
     }
 }
