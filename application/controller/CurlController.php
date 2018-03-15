@@ -106,6 +106,7 @@ class CurlController
         $time = $time2 [0];  //unix时间戳/ms
         $url = "https://io.playstation.com/playstation/psn/profile/public/userData?onlineId=Gilgamesh_y&_=".$time;
         $header[] = "Referer:https://www.playstation.com/en-us/my/public-trophies/";
+        $header[] = "User-Agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36";
         $user_data = $this->curl_request($url,$header,$cookie='',$post_data='',$https=true);
         $url = "https://io.playstation.com/playstation/psn/public/trophies/?onlineId=Gilgamesh_y&_=".$time;
         $online = $this->curl_request($url,$header,$cookie='',$post_data='',$https=true);
@@ -114,6 +115,8 @@ class CurlController
         $res['userData'] = $user_data;
         $res['online'] = $online;
         $json = json_encode($res);
+        dump($res);
+        exit();
         $file = ROOT_PATH . 'public' . DS . 'static' . DS . 'json' . DS .'psn.json';
         file_put_contents($file, $json);
     }

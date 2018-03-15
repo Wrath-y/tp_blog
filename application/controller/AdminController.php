@@ -121,6 +121,8 @@ class AdminController extends Controller
             $data['article_con'] = Request::instance()->param('article_con');
             $data['category'] = Request::instance()->param('category');
             $data['article_html'] = Request::instance()->param('html');
+            $data['create_time'] = time();
+            $data['update_time'] = time();
             preg_match('/[\s\S]*?<img src="(.+?)"[\s\S]*?/i', $data['article_html'], $img_src);
             if ($img_src) {
                 $data['img'] = $img_src[1];
